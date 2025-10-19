@@ -125,6 +125,8 @@
             var webstore = new Vue ({ 
                 el:'#app',
                 data:{
+                    sortKey: 'price',
+                    sortDirection: 'asc',
                     showProduct: true,
                     sitename: 'After School Activities',
                     order:{
@@ -183,22 +185,57 @@
                     },
                     sortedProducts: function() {
                         let productsArray = this.filteredProducts.slice(); // creates a copy of the filtered products array
+                        let direction = this.sortDirection === 'desc' ? -1 : 1;
+
+                        productsArray.sort((a, b) => {
+                            let valueA, valueB;
+                            
+                            if(this.sortKey === 'title') {
+                                valueA = a.title.toLowerCase();
+                                valueB = b.title.toLowerCase();
+                            } 
+                            else if(this.sortKey === 'category') {
+                                valueA = a.title.toLowerCase();
+                                valueB = b.title.toLowerCase();
+                            } 
+                            else if(this.sortKey === 'price') {
+                                valueA = a.price;
+                                valueB = b.price;
+                            } 
+                            else if(this.sortKey === 'rating') {
+                                valueA = a.rating;
+                                valueB = b.rating;
+                            }
+                            else if(this.sortKey === 'location') {
+                                valueA = a.location.toLowerCase();
+                                valueB = b.location.toLowerCase();
+                            } else if(this.sortKey === 'availableInventory') {
+                                valueA = a.availableInventory;
+                                valueB = b.availableInventory;
+                            }
+                            else {
+                                valueA = 0;
+                                valueB = 0;
+                            }
+
+                            if (valueA < valueB) return -1 * direction;
+                            if (valueA > valueB) return 1 * direction;
+                            return 0;
+                
+                        });
+                        return productsArray; // returns a sorted array of products
+                        
+                    },
+                    /*sortedProducts: function() {
+                        let productsArray = this.filteredProducts.slice(); // creates a copy of the filtered products array
+
                         function compare(a, b) {
                             if (a.price > b.price) return 1;
                             if (a.price < b.price) return -1;
                             return 0;
                         }
                         return productsArray.sort(compare); // returns a sorted array of products by price
-                    },
-                    sortByTitle: function() {
-                        let productsArray = this.products.slice(); // creates a copy of the products array
-                        function compare(a, b) {
-                            if (a.title > b.title) return 1;
-                            if (a.title < b.title) return -1;
-                            return 0;
-                        }
-                        return productsArray.sort(compare); // returns a sorted array of products by title
-                    },
+                    },*/
                     filteredProducts: function () {
                         const q = this.searchQuery.trim().toLowerCase();
                         if (!q) return this.products;
