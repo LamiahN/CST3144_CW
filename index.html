@@ -48,7 +48,7 @@
 
                     <!-- Sorting controls -->
                     <div class="sorting-controls">
-                        <label for="sortKey">Sort by:</label>
+                        <label for="sortKey">Sort by: </label>
                         <select id="sortKey" v-model="sortKey">
                             <option value="title">Title</option>
                             <option value="category">Category</option>
@@ -58,7 +58,7 @@
                             <option value="availableInventory">Available Spaces</option>
                         </select>
 
-                        <label for="sortDirection">Direction:</label>
+                        <label for="sortDirection">Direction: </label>
                         <select id="sortDirection" v-model="sortDirection">
                             <option value="asc">Ascending</option>
                             <option value="desc">Descending</option>
@@ -66,7 +66,7 @@
                     </div>
                     
                     <!-- Activities 4 per grid -->
-                    <div class="card-layout" v-else>
+                    <div class="card-layout" >
                         <div v-for="product in sortedProducts" :key="product.id" class="card">
                             <figure class="icon">
                                 <img :src="product.image" alt="">
@@ -206,6 +206,11 @@
                         let productsArray = this.filteredProducts.slice(); // creates a copy of the filtered products array
                         let direction = this.sortDirection === 'desc' ? -1 : 1;
 
+                        // helper function to calculate spaces left
+                        const spacesLeft = (product) => {
+                            return product.availableInventory - this.cartCount(product.id);
+                        };
+
                         productsArray.sort((a, b) => {
                             let valueA, valueB;
                             
@@ -214,8 +219,8 @@
                                 valueB = b.title.toLowerCase();
                             } 
                             else if(this.sortKey === 'category') {
-                                valueA = a.title.toLowerCase();
-                                valueB = b.title.toLowerCase();
+                                valueA = a.category.toLowerCase();
+                                valueB = b.category.toLowerCase();
                             } 
                             else if(this.sortKey === 'price') {
                                 valueA = a.price;
@@ -228,7 +233,8 @@
                             else if(this.sortKey === 'location') {
                                 valueA = a.location.toLowerCase();
                                 valueB = b.location.toLowerCase();
-                            } else if(this.sortKey === 'availableInventory') {
+                            } 
+                            else if(this.sortKey === 'availableInventory') {
                                 valueA = a.availableInventory;
                                 valueB = b.availableInventory;
                             }
