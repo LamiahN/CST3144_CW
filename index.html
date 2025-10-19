@@ -45,6 +45,25 @@
                         <strong>No activities found!</strong>
                         <div v-if="searchQuery">for "{{ searchQuery }}".</div>
                     </div>
+
+                    <!-- Sorting controls -->
+                    <div class="sorting-controls">
+                        <label for="sortKey">Sort by:</label>
+                        <select id="sortKey" v-model="sortKey">
+                            <option value="title">Title</option>
+                            <option value="category">Category</option>
+                            <option value="price">Price</option>
+                            <option value="rating">Rating</option>
+                            <option value="location">Location</option>
+                            <option value="availableInventory">Available Spaces</option>
+                        </select>
+
+                        <label for="sortDirection">Direction:</label>
+                        <select id="sortDirection" v-model="sortDirection">
+                            <option value="asc">Ascending</option>
+                            <option value="desc">Descending</option>
+                        </select>
+                    </div>
                     
                     <!-- Activities 4 per grid -->
                     <div class="card-layout" v-else>
