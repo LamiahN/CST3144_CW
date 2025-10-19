@@ -20,7 +20,7 @@
         <div id="app">
             <!-- Header -->
             <header>
-                <h1 v-text = "sitename"></h1>
+                <h1 v-text = "sitename" style="margin-left: 2rem;"></h1>
                 <!-- Search control -->
                 <div class="controls">
                     <input class="input" type="search"
@@ -100,37 +100,32 @@
 
                 <!-- Displaying Checkout Section -->
                 <div v-else>
-                    <h2>Checkout</h2>
 
-                    <p v-if="cart.length === 0">Your cart is empty.</p>
+                    <div class="checkout-card">
+
+                        <h2 style="text-align: center; font-size: 2rem; font-weight: 900; color: #4b56db; margin: 4px 0 18px;">Checkout</h2>
+
+                        <ul class="cart-list">
+                            <li v-for="item in cart">{{ item.title }} - AED {{ item.price }}</li>
+                        </ul>
+                        
+                        <h2 style="text-align: right; font-size: 1.25rem; color: #4b56db; font-weight: 900; margin: 10px 0 18px;">Total: AED {{ cartTotal }}</h2>
+
+                        <input v-model="order.firstName" class="checkout-input" placeholder="First Name"/>
+                        <input v-model="order.lastName" class="checkout-input" placeholder="Last Name"/>
+                        <input v-model="order.phoneNumber" class="checkout-input" placeholder="Phone Number"/>
+    
+                        <h2>Order Information</h2>
+                        <p>First Name: {{order.firstName}}</p>
+                        <p>Last Name: {{order.lastName}}</p>
+                        <p>Phone Number: {{order.phoneNumber}}</p>
+
+                        <button v-on:click="submitForm">Place Order</button>
+    
+                        <button v-on:click="clearCart" v-if="cart.length > 0">Clear Cart</button>
+                    </div>
                     
-                    <p>
-                        <strong>First Name:</strong>
-                        <!-- This input field is bound to 'firstName' in the 'order' object -->
-                         <input v-model.trim="order.firstName"/>
-                    </p>
-                    <p>
-                        <strong>Last Name:</strong>
-                        <!-- This input field is bound to 'lastName' in the 'order' object -->
-                         <input v-model.trim="order.lastName"/>
-                    </p>
-                    <p>
-                        <strong>Phone Number:</strong>
-                        <!-- This input field is bound to 'phoneNumber' in the 'order' object -->
-                         <input v-model="order.phoneNumber"/>
-                    </p>
-                    <button v-on:click="submitForm">Place Order</button>
-
-                    <h2>Order Information</h2>
-                    <p>First Name: {{order.firstName}}</p>
-                    <p>Last Name: {{order.lastName}}</p>
-                    <p>Phone Number: {{order.phoneNumber}}</p>
-
-                    <ul>
-                        <li v-for="item in cart">Activity: {{ item.title }} - AED {{ item.price }}</li>
-                    </ul>
-                    <h3>Total: AED {{ cartTotal }}</h3>
-                    <button v-on:click="clearCart" v-if="cart.length > 0">Clear Cart</button>
+                    
                 </div>
 
                 <!-- Footer -->
