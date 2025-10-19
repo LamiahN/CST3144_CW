@@ -25,8 +25,9 @@
                 <div class="controls">
                     <input class="input" type="search"
                         placeholder="Search activities"
-                        v-model.trim="searchQuery" />
+                        v-model.trim="searchQuery" />    
                 </div>
+                <!-- Checkout button -->
                 <button @click="showCheckout" v-if="canCheckout()" class="btn-pill">
                     <span class="fas fa-shopping-cart"></span> Checkout ({{ cartItemCount }})
                 </button>
@@ -47,8 +48,8 @@
                     </div>
 
                     <!-- Sorting controls -->
-                    <div class="sorting-controls">
-                        <label for="sortKey">Sort by: </label>
+                    <div class="sorting-bar">
+                        <label for="sortKey" class="sorting-label">Sort by: </label>
                         <select id="sortKey" v-model="sortKey">
                             <option value="title">Title</option>
                             <option value="category">Category</option>
@@ -58,7 +59,7 @@
                             <option value="availableInventory">Available Spaces</option>
                         </select>
 
-                        <label for="sortDirection">Direction: </label>
+                        <label for="sortDirection" class="sorting-label">Direction: </label>
                         <select id="sortDirection" v-model="sortDirection">
                             <option value="asc">Ascending</option>
                             <option value="desc">Descending</option>
