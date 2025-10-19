@@ -27,9 +27,11 @@
                         placeholder="Search activities"
                         v-model.trim="searchQuery" />
                 </div>
-                <button v-on:click='showCheckout'>
-                    {{cartItemCount}}
-                    <span class = "fas fa-cart-plus"></span>Checkout
+                <button @click="showCheckout" v-if="canCheckout()" class="btn-pill">
+                    <span class="fas fa-shopping-cart"></span> Checkout ({{ cartItemCount }})
+                </button>
+                <button disabled v-else class="btn-pill" disabled>
+                    <span class="fas fa-shopping-cart"></span> Checkout (0)
                 </button>
             </header>
 
@@ -44,7 +46,7 @@
                         <div v-if="searchQuery">for "{{ searchQuery }}".</div>
                     </div>
                     
-                    <!-- 4-up grid -->
+                    <!-- Activities 4 per grid -->
                     <div class="card-layout" v-else>
                         <div v-for="product in sortedProducts" :key="product.id" class="card">
                             <figure class="icon">
@@ -64,18 +66,19 @@
                                 <button @click="addToCart(product)" v-if="canAddToCart(product)" class="btn-pill">
                                     Add to Cart
                                 </button>
-                                <button disabled v-else class="btn-pill:disabled">Sold Out</button>
+                                <button disabled v-else class="btn-pill" disabled> Sold Out</button>
                             
                                 <span v-if="product.availableInventory === cartCount(product.id)">All out!</span>
                                 <span v-else-if="product.availableInventory - cartCount(product.id) < 5">
                                     Only {{product.availableInventory - cartCount(product.id)}} left!
                                 </span>
-                                <span v-else>Buy now!</span>
+                                <span v-else style="margin-left: 0.5rem;">Buy now!</span>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- Displaying Checkout -->
+
+                <!-- Displaying Checkout Section -->
                 <div v-else>
                     <h2>Checkout</h2>
 
@@ -151,6 +154,9 @@
                     },
                     canAddToCart(product) {
                         return product.availableInventory > this.cartCount(product.id);
+                    },
+                    canCheckout() {
+                        return this.cart.length > 0;
                     },
                     cartCount(id) {
                         let count = 0;

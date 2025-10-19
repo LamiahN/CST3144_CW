@@ -25,7 +25,7 @@ header{
 .footer-bar{ width:100%; overflow:hidden; position:relative; margin-top:2rem; }
 .footer-bar img{ width:100%; height:auto; display:block; object-fit:cover; }
 
-/* Activities grid (exactly 4 per row on large screens) previously called .activities */
+/* Activities grid (exactly 4 per row on large screens) */
 .card-layout{
   display:grid;
   grid-template-columns:repeat(4, minmax(0, 1fr));
@@ -41,10 +41,14 @@ header{
 
 /* Add to cart button */
 .btn-pill{
-  align-self:flex-start; border:none; border-radius:999px; padding:.5rem .9rem; background:#fff; color:var(--blue-600);
+  align-self:flex-start; border:none; border-radius:999px; padding:.5rem .9rem; background:#fff; color:#4b56db;
   box-shadow:0 2px 6px rgba(0,0,0,.08); display:inline-flex; gap:.45rem; align-items:center; font-weight:700; cursor:pointer;
+  margin-top: 1.5rem;
 }
-.btn-pill:disabled{ opacity:.55; cursor:not-allowed; }
+.btn-pill:disabled, .btn-pill:disabled:hover{ 
+  cursor:not-allowed;
+  opacity:0.6;
+}
 
 /* Search */
 .controls { margin: 0 1rem 1rem; }
