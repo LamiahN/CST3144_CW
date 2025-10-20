@@ -101,8 +101,44 @@ header{
   list-style: none; margin: 0 0 18px; padding: 16px; background: #f7f8ff; border: 1px solid #eceffe; border-radius: 18px;
 }
 
-/* Inputs (full name, phone) */
 .checkout-input{
   display: block; width: 100%; max-width: 59rem; margin: 0 0 18px; padding: 16px; border: 1px solid #eceffe;
   border-radius: 16px; background: #f2f3ff; outline: none;
+}
+
+.checkout-primary-btns {
+  background: #fff;
+  color: #6f77ff;
+  font-family:'DynaPuff', system-ui;
+  font-weight: 800;
+  border-color: #6f77ff;
+  border-radius: 50px;
+  padding: 10px 24px;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.checkout-primary-btns:hover:not(:disabled) {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.checkout-primary-btns:disabled {
+  background: #6f77ff;
+  color: #fff;
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.remove-item{
+  border: 0;
+  background: #ffa2a2;
+  color: #f64040;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-weight: 700;
+  cursor: pointer;
 }
