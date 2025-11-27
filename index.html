@@ -414,7 +414,7 @@
                 },
                 mounted() {
                     // Fetch lessons from backend when the app loads (GET /lessons)
-                    fetch('http://localhost:3000/lessons')
+                    fetch('https://cst3144-cw1-backend-s0fc.onrender.com/lessons')
                         .then(response => {
                             if (!response.ok) {
                                 throw new Error('Failed to load lessons');
