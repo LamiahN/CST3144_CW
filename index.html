@@ -323,7 +323,7 @@
                             numberOfSpace: this.cart.length
                         };
 
-                        const response = await fetch('http://localhost:3000/orders', {
+                        const response = await fetch('https://cst3144-cw1-backend-s0fc.onrender.com/orders', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify(orderData)
@@ -348,7 +348,7 @@
                             );
                             if (!product) continue;
 
-                            const putRes = await fetch(`http://localhost:3000/lessons/${lessonID}`, {
+                            const putRes = await fetch(`https://cst3144-cw1-backend-s0fc.onrender.com/lessons/${lessonID}`, {
                                 method: 'PUT',
                                 headers: { 'Content-Type': 'application/json' },
                                 body: JSON.stringify({ availableInventory: product.availableInventory })
@@ -362,7 +362,7 @@
 
                     // Re-fetch lessons from backend (GET /lessons)
                     async refreshLessons() {
-                        const res = await fetch('http://localhost:3000/lessons');
+                        const res = await fetch('https://cst3144-cw1-backend-s0fc.onrender.com/lessons');
                         if (res.ok) {
                             this.products = await res.json();
                         }
@@ -398,13 +398,13 @@
                     fetchSearchResults(query) {
                         if (!query) { 
                             // If empty search, reload all lessons
-                            fetch("http://localhost:3000/lessons")
+                            fetch("https://cst3144-cw1-backend-s0fc.onrender.com/lessons")
                                 .then(res => res.json())
                                 .then(data => this.products = data);
                             return;
                         }
 
-                        fetch(`http://localhost:3000/search?query=${encodeURIComponent(query)}`) // encodeURIComponent to handle special characters
+                        fetch(`https://cst3144-cw1-backend-s0fc.onrender.com/search?query=${encodeURIComponent(query)}`) // encodeURIComponent to handle special characters
                             .then(res => res.json())
                             .then(data => {
                                 this.products = data;
