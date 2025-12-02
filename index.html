@@ -70,7 +70,7 @@
                     <div class="card-layout" >
                         <div v-for="product in sortedProducts" :key="product.id" class="card">
                             <figure class="icon">
-                                <img :src="'/static/Images/' + product.image" alt="">
+                                <img :src="'https://cst3144-cw1-backend-s0fc.onrender.com/static/Images/' + product.image" alt="">
                             </figure>
                             <div class="card-content">
                                 <h2 v-text="product.title"></h2>
@@ -198,92 +198,6 @@
                         this.cart = [];
                     },
                     
-                    /*submitForm() {
-                        // array of order items with lessonID, title, quantity
-                        const orderItems = [];
-
-                        this.cart.forEach(item => {
-                            // using mongo _id if present otherwise default to item.id
-                            const lessonID = item._id || item.id;
-
-                            const existing = orderItems.find(i => i.lessonID === lessonID);
-                            if (existing) {
-                                existing.quantity += 1;
-                            } else {
-                                orderItems.push({
-                                    lessonID: lessonID,
-                                    title: item.title,
-                                    quantity: 1
-                                });
-                            }
-                        });
-
-                        // order object to matche the backend
-                        const orderData = {
-                            name: this.order.firstName + ' ' + this.order.lastName,
-                            phoneNumber: this.order.phoneNumber,
-                            orderItems: orderItems,
-                            numberOfSpace: this.cart.length // total items in cart
-                        };
-
-                        // send POST request to backend
-                        fetch('http://localhost:3000/orders', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(orderData)
-                        })
-                        .then(response => {
-                            if (!response.ok) {
-                                throw new Error('Failed to submit order');
-                            }
-                            return response.json();
-                        })
-                        .then(data => {
-                            console.log('Order saved:', data);
-                            alert('Order submitted successfully!');
-
-                            // cleanup after successful order
-                            this.cart = [];
-                            this.order.firstName = '';
-                            this.order.lastName = '';
-                            this.order.phoneNumber = '';
-                            this.showProduct = true; // back to activities page
-                        })
-                        .catch(error => {
-                            console.error('Error submitting order:', error);
-                            alert('There was a problem submitting your order. Please try again.');
-                        });
-                    },*/
-                    
-                    // check if product can be added to cart based on available inventory
-                    /*canAddToCart(product) {
-                        return product.availableInventory > this.cartCount(product.id);
-                    },
-                    
-                    // check if checkout is possible based on cart contents
-                    canCheckout() {
-                        return this.cart.length > 0;
-                    },
-                    // count how many of a specific product is in the cart
-                    cartCount(id) {
-                        let count = 0;
-                        for (let i = 0; i < this.cart.length; i++) {
-                            if (this.cart[i] === id) {
-                                count++;
-                            }
-                        }
-                        return count;
-                    },
-                    // clear the cart and restore product inventories
-                    clearCart() {
-                        this.cart.forEach(item => {
-                            const product = this.products.find(p => p.id === item.id);
-                            if (product) {
-                                product.availableInventory++;
-                            }
-                        });
-                        this.cart = [];
-                    },*/
                     removeFromCart(index) { // remove item from cart based on index
                         const item = this.cart[index];
                         if (!item) return;
@@ -297,7 +211,7 @@
                         // remove from cart UI array
                         this.cart.splice(index, 1);
                     },
-                    // ----------- New methods for backend integration -----------
+                    // New methods for backend integration -----------
                     // Grouping cart items into lessonID + title + quantity 
                     buildOrderItems() {
                         const orderItems = [];
@@ -483,17 +397,6 @@
                         return productsArray; // returns a sorted array of products
                         
                     },
-                    /*filteredProducts: function () { // old filter products based on search query but still used for local filtering
-                        const q = this.searchQuery.trim().toLowerCase();
-                        if (!q) return this.products;
-                        return this.products.filter(p => {
-                            const title = String(p.title || '').toLowerCase();
-                            const desc  = String(p.description || '').toLowerCase();
-                            const cat   = String(p.category || '').toLowerCase();
-                            const loc = String(p.location || '').toLowerCase();
-                            return title.includes(q) || desc.includes(q) || cat.includes(q) || loc.includes(q); 
-                        });
-                    },*/
                     filteredProducts() {
                         return this.products;  // products already filtered by backend
                     },
