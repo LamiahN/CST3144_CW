@@ -17,8 +17,9 @@
     </head>
 
     <body>
-        <!-- The element where Vue will mount -->
+        <!-- Element where Vue will mount -->
         <div id="app">
+
             <!-- Header -->
             <header>
                 <h1 v-text = "sitename" style="margin-left: 2rem;"></h1>
@@ -167,63 +168,68 @@
                     addToCart(product) {
                         this.cart.push(product);
                         product.availableInventory--;
-                    },                     
+                    }, 
+                    
+                    // Toggle between product view and checkout view
                     showCheckout() {
-                        // console.log(this.showProduct);
                         this.showProduct = this.showProduct ? false : true;
                     },
-                    // can we add one more of this product? (based on spaces left)
+
+                    // (based on spaces left)
                     canAddToCart(product) { 
                         return product.availableInventory > this.cartCount(product.id);
                     },
 
-                    // can we go to checkout? (cart must not be empty)
+                    // (cart must not be empty)
                     canCheckout() {
                         return this.cart.length > 0;
                     },
 
-                    // how many of a specific product are in the cart
+                    // amount of specific item in cart 
                     cartCount(id) { 
                         let count = 0;
                         for (let i = 0; i < this.cart.length; i++) {
-                            if (this.cart[i] === id) {
+                            if (this.cart[i] === id) { 
                                 count++;
                             }
                         }
                         return count;
                     },
 
-                    // clear cart (used if you ever want a "clear cart" button)
+                    // clear cart for future clearCart btn
                     clearCart() {
                         this.cart = [];
                     },
                     
-                    removeFromCart(index) { // remove item from cart based on index
+                    // remove a single item from cart
+                    removeFromCart(index) { 
                         const item = this.cart[index];
                         if (!item) return;
 
                         // give the seat back to the product
-                        const p = this.products.find(p => // find the product in products array
+                        const p = this.products.find(p => // find product in products array
                             (p.id !== undefined && p.id === item.id) || p.title === item.title // in case id is missing
                         );
                         if (p) p.availableInventory += 1; // increase available inventory
 
                         // remove from cart UI array
-                        this.cart.splice(index, 1);
+                        this.cart.splice(index, 1); // modify original array
                     },
-                    // New methods for backend integration -----------
+                    // Methods for backend integration ---------------
+                    
                     // Grouping cart items into lessonID + title + quantity 
                     buildOrderItems() {
-                        const orderItems = [];
+                        const orderItems = []; 
 
                         this.cart.forEach(item => {
                             const lessonID = item._id || item.id;
 
-                            const existing = orderItems.find(i => i.lessonID === lessonID);
+                            // if lessonID exists in orderItems[], inc quantity
+                            const existing = orderItems.find(i => i.lessonID === lessonID); 
                             if (existing) {
-                                existing.quantity += 1;
+                                existing.quantity += 1; 
                             } else {
-                                orderItems.push({
+                                orderItems.push({ 
                                     lessonID: lessonID,
                                     title: item.title,
                                     quantity: 1
@@ -233,8 +239,9 @@
 
                         return orderItems;
                     },
-                    // Saving order in "orders" collection (POST /orders)  ✅
-                    async saveOrder(orderItems) {
+
+                    // Saving order in "orders" collection (POST /orders)
+                    async saveOrder(orderItems) { // async required by await (promise)
                         const orderData = {
                             name: this.order.firstName + ' ' + this.order.lastName,
                             phoneNumber: this.order.phoneNumber,
@@ -242,7 +249,7 @@
                             numberOfSpace: this.cart.length
                         };
 
-                        const response = await fetch('https://cst3144-cw1-backend-s0fc.onrender.com/orders', {
+                        const response = await fetch('https://cst3144-cw1-backend-s0fc.onrender.com/orders', { 
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify(orderData)
@@ -252,12 +259,12 @@
                             throw new Error('Failed to submit order');
                         }
 
-                        return response.json(); // contains message + orderId
+                        return response.json(); // message and orderId
                     },
 
-                    // Update availableInventory for each lesson in cart (PUT /lessons/:id) ✅
+                    // Update availableInventory for each lesson in cart (PUT /lessons/:id) 
                     async updateLessonInventoryOnServer() {
-                        const uniqueLessonIds = [...new Set(
+                        const uniqueLessonIds = [...new Set( // get unique lesson IDs from cart
                             this.cart.map(item => item._id || item.id)
                         )];
 
@@ -280,14 +287,14 @@
                     },
 
                     // Re-fetch lessons from backend (GET /lessons)
-                    async refreshLessons() {
+                    async refreshLessons() { 
                         const res = await fetch('https://cst3144-cw1-backend-s0fc.onrender.com/lessons');
                         if (res.ok) {
                             this.products = await res.json();
                         }
                     },
 
-                    // Clear form + cart and go back to activities view
+                    // Clear form and cart and go back to activities view
                     resetOrderState() {
                         this.cart = [];
                         this.order.firstName = '';
@@ -296,14 +303,14 @@
                         this.showProduct = true;
                     },
 
-                    // Orchestrator method for form submission
+                    // Main method for form submission
                     async submitForm() {
                         try {
                             const orderItems = this.buildOrderItems();
                             const data = await this.saveOrder(orderItems);
                             console.log('Order saved:', data);
 
-                            await this.updateLessonInventoryOnServer();
+                            await this.updateLessonInventoryOnServer(); 
                             await this.refreshLessons();
 
                             alert('Order submitted successfully!');
@@ -315,52 +322,59 @@
                     },
                     // Fetch search results from backend
                     fetchSearchResults(query) {
+                        // empty search
                         if (!query) { 
-                            // If empty search, reload all lessons
+                            // reload all lessons
                             fetch("https://cst3144-cw1-backend-s0fc.onrender.com/lessons")
                                 .then(res => res.json())
                                 .then(data => this.products = data);
                             return;
                         }
 
-                        fetch(`https://cst3144-cw1-backend-s0fc.onrender.com/search?query=${encodeURIComponent(query)}`) // encodeURIComponent to handle special characters
+                        // non-empty search
+                        fetch(`https://cst3144-cw1-backend-s0fc.onrender.com/search?query=${encodeURIComponent(query)}`) // encodeURIComponent handle special characters
                             .then(res => res.json())
                             .then(data => {
-                                this.products = data;
+                                this.products = data; // update products with search results
                             })
                             .catch(err => console.error(err));
                     }
                 },
-                mounted() {
+                mounted() { // lifecycle hook 
                     // Fetch lessons from backend when the app loads (GET /lessons)
                     fetch('https://cst3144-cw1-backend-s0fc.onrender.com/lessons')
-                        .then(response => {
+                        .then(response => { // check for response.ok
                             if (!response.ok) {
                                 throw new Error('Failed to load lessons');
                             }
                             return response.json();
                         })
-                        .then(data => {
-                            console.log('Lessons from backend:', data);
+                        .then(data => { // data is [] of lessons
+                            console.log('Lessons from backend:', data); 
                             this.products = data;
                         })
                         .catch(error => {
                             console.error('Error fetching lessons:', error);
                         });
                 },
-                computed: { // cannot take any parameters. performs calculations based on data properties
+                computed: { // calculations based on data properties
+                    
+                    // returns number of items in cart 
                     cartItemCount: function() {
-                        return this.cart.length || ""; // returns the number of items in the cart
+                        return this.cart.length || ""; 
                     },
+
+                    // returns sorted array of products based on sortKey and sortDirection
                     sortedProducts: function() {
-                        let productsArray = this.filteredProducts.slice(); // creates a copy of the filtered products array
-                        let direction = this.sortDirection === 'desc' ? -1 : 1;
+                        let productsArray = this.filteredProducts.slice(); // creates copy of filtered products array. 
+                        let direction = this.sortDirection === 'desc' ? -1 : 1; 
 
                         // helper function to calculate spaces left
                         const spacesLeft = (product) => {
                             return product.availableInventory - this.cartCount(product.id);
                         };
 
+                        // sorting logic
                         productsArray.sort((a, b) => {
                             let valueA, valueB;
                             
@@ -384,25 +398,32 @@
                                 valueA = a.availableInventory;
                                 valueB = b.availableInventory;
                             }
-                            else {
+                            else { // default case 
                                 valueA = 0;
                                 valueB = 0;
                             }
 
+                            // comparison
                             if (valueA < valueB) return -1 * direction;
                             if (valueA > valueB) return 1 * direction;
                             return 0;
                 
                         });
-                        return productsArray; // returns a sorted array of products
+                        return productsArray; // returns sorted array of products
                         
                     },
+
+                    // products filtered by search query
                     filteredProducts() {
                         return this.products;  // products already filtered by backend
                     },
+
+                    // total price of items in cart
                     cartTotal(){
-                        return this.cart.reduce((total, item) => total + item.price, 0).toFixed(2);
+                        return this.cart.reduce((total, item) => total + item.price, 0).toFixed(2); 
                     },
+
+                    // Validation of user inputs
                     validFirstName() {
                         const nameRegex = /^[A-Za-z]{2,}$/;
                         return nameRegex.test(this.order.firstName);
@@ -415,11 +436,13 @@
                         const phoneRegex = /^\+?[0-9]{7,15}$/;
                         return phoneRegex.test(this.order.phoneNumber);
                     },
+
+                    // overall form validity
                     validOrder() {
                         return this.validFirstName && this.validLastName && this.validPhoneNumber;
                     }
                 },
-                watch: { // watcher to trigger backend search when user types
+                watch: { // trigger backend search when user types
                     searchQuery(newValue) {
                         this.fetchSearchResults(newValue);
                     }
