@@ -7,10 +7,11 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
         <script src="https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.js"></script>
 
-        <!-- <script src="products.js"></script> -->
+        <!-- <script src="products.js"></script> --> <!-- removed as products are now fetched from backend -->
         <link rel="stylesheet" href="styles.css">
 
-        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <!-- links for google fonts s-->
+        <link rel="preconnect" href="https://fonts.googleapis.com"> 
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@400..700&display=swap" rel="stylesheet">
     </head>
@@ -69,7 +70,7 @@
                     <div class="card-layout" >
                         <div v-for="product in sortedProducts" :key="product.id" class="card">
                             <figure class="icon">
-                                <img :src="product.image" alt="">
+                                <img :src="'/static/Images/' + product.image" alt="">
                             </figure>
                             <div class="card-content">
                                 <h2 v-text="product.title"></h2>
@@ -99,11 +100,11 @@
 
                 <!-- Displaying Checkout Section -->
                 <div v-else>
-
                     <div class="checkout-card">
 
                         <h2 style="text-align: center; font-size: 2rem; font-weight: 900; color: #4b56db; margin: 4px 0 18px;">Checkout</h2>
 
+                        <!-- Displaying Cart Items -->
                         <ul class="cart-list">
                             <li v-for="(item, index) in cart" :key="index" class="cart-item">
                                 {{ item.title }} - AED {{ Number(item.price).toFixed(2) }}
@@ -111,25 +112,29 @@
                             </li>
                         </ul>
                         
+                        <!-- Displaying Total Price -->
                         <h2 style="text-align: right; font-size: 1.25rem; color: #4b56db; font-weight: 900; margin: 10px 0 18px;">Total: AED {{ cartTotal }}</h2>
 
+                        <!-- User Information Form -->
                         <input v-model="order.firstName" class="checkout-input" placeholder="First Name"/>
                         <p v-if="!validFirstName && order.firstName" class="validityNote">Please enter a valid first name.</p>
+                        
                         <input v-model="order.lastName" class="checkout-input" placeholder="Last Name"/>
                         <p v-if="!validLastName && order.lastName" class="validityNote">Please enter a valid last name.</p>
+                        
                         <input v-model="order.phoneNumber" class="checkout-input" placeholder="Phone Number"/>
                         <p v-if="!validPhoneNumber && order.phoneNumber" class="validityNote">Please enter a valid phone number.</p>
     
+                        <!-- Displaying user details from inputs, dynamically -->
                         <h2>Order Information</h2>
                         <p>First Name: {{order.firstName}}</p>
                         <p>Last Name: {{order.lastName}}</p>
                         <p>Phone Number: {{order.phoneNumber}}</p>
 
+                        <!-- Submit and Back Buttons -->
                         <button class="checkout-primary-btns" :disabled="!validOrder" v-on:click="submitForm">Checkout</button>
                         <button class="checkout-primary-btns" @click="showProduct = true" class="back-btn">Back</button>
                     </div>
-                    
-                    
                 </div>
 
                 <!-- Footer -->
@@ -168,7 +173,7 @@
                         this.showProduct = this.showProduct ? false : true;
                     },
                     // can we add one more of this product? (based on spaces left)
-                    canAddToCart(product) { // code from last commit
+                    canAddToCart(product) { 
                         return product.availableInventory > this.cartCount(product.id);
                     },
 
@@ -178,7 +183,7 @@
                     },
 
                     // how many of a specific product are in the cart
-                    cartCount(id) { // code from last commit
+                    cartCount(id) { 
                         let count = 0;
                         for (let i = 0; i < this.cart.length; i++) {
                             if (this.cart[i] === id) {
