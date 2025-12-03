@@ -4,6 +4,9 @@
 ## Frontend GitHub Link:
 ### https://github.com/LamiahN/CST3144_CW.git
 
+## GitHub Pages Link:
+### https://lamiahn.github.io/CST3144_CW/
+
 ## Backend GitHub Link:
 ### https://github.com/LamiahN/CST3144_CW1_backend.git
 
